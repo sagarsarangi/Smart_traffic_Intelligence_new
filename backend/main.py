@@ -1,16 +1,6 @@
 """
 Smart Traffic Intelligence System — FastAPI Entry Point
 
-Initialises all agents, loads models and dataset, starts the anomaly replay
-background task, and mounts all API routers.
-
-Run with:
-    uvicorn backend.main:app --reload
-
-Environment variables (optional — set in .env or shell):
-    GEMINI_API_KEY   Google Gemini API key (Agents 1 and 4)
-    GOOGLE_API_KEY   Alternative name for the same key
-"""
 
 import asyncio
 import logging
