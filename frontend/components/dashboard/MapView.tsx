@@ -50,6 +50,7 @@ export default function MapView({ onOpenPanel }: MapViewProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [isAnomalyModalOpen, setIsAnomalyModalOpen] = useState(false);
     const [replayCounter, setReplayCounter] = useState(0);
+    const [mapId] = useState(() => Math.random().toString(36).substring(7));
 
     const bglrCenter: [number, number] = [12.9716, 77.5946];
 
@@ -159,7 +160,7 @@ export default function MapView({ onOpenPanel }: MapViewProps) {
             {/* Floating Action Button for Anomalies */}
             <button 
                 onClick={() => setIsAnomalyModalOpen(true)}
-                className="absolute top-4 left-4 z-[1000] bg-white border-4 border-neo-border p-3 shadow-neo hover:bg-neo-secondary transition-colors group flex items-center justify-center gap-2"
+                className="absolute top-4 left-4 z-40 bg-white border-4 border-neo-border p-3 shadow-neo hover:bg-neo-secondary transition-colors group flex items-center justify-center gap-2"
                 title="View Anomalies"
             >
                 <div className="relative">
@@ -257,7 +258,7 @@ export default function MapView({ onOpenPanel }: MapViewProps) {
             )}
 
             {/* Map Container */}
-            <MapContainer center={bglrCenter} zoom={12} className="w-full h-full z-10" zoomControl={false}>
+            <MapContainer key={mapId} center={bglrCenter} zoom={12} className="w-full h-full z-10" zoomControl={false}>
                 <TileLayer
                     url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'

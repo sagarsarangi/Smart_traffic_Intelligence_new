@@ -38,26 +38,26 @@ export default function DashboardPage() {
     return (
         <div className="flex flex-col h-[calc(100vh-80px)] w-full overflow-hidden bg-neo-bg relative">
             {/* Dashboard Sub-navigation */}
-            <div className="flex border-b-3 border-neo-border bg-white z-20 shadow-neo-sm relative">
+            <div className="flex border-b-3 border-neo-border bg-white z-20 shadow-neo-sm relative overflow-x-auto">
                 <button
                     onClick={() => setActiveView('map')}
-                    className={`flex items-center gap-2 px-6 py-4 font-mono font-bold uppercase border-r-3 border-neo-border transition-all ${activeView === 'map' ? 'bg-neo-primary text-neo-text border-b-4 border-b-neo-text' : 'bg-white hover:bg-neo-secondary'}`}
+                    className={`flex items-center gap-2 px-4 md:px-6 py-3 md:py-4 font-mono text-sm md:text-base font-bold uppercase border-r-3 border-neo-border transition-all whitespace-nowrap flex-shrink-0 ${activeView === 'map' ? 'bg-neo-primary text-neo-text border-b-4 border-b-neo-text' : 'bg-white hover:bg-neo-secondary'}`}
                 >
-                    <MapTrifold size={24} weight="bold" />
+                    <MapTrifold size={22} weight="bold" className="flex-shrink-0" />
                     City Map
                 </button>
                 <button
                     onClick={() => setActiveView('submit')}
-                    className={`flex items-center gap-2 px-6 py-4 font-mono font-bold uppercase border-r-3 border-neo-border transition-all ${activeView === 'submit' ? 'bg-neo-primary text-neo-text border-b-4 border-b-neo-text' : 'bg-white hover:bg-neo-secondary'}`}
+                    className={`flex items-center gap-2 px-4 md:px-6 py-3 md:py-4 font-mono text-sm md:text-base font-bold uppercase border-r-3 border-neo-border transition-all whitespace-nowrap flex-shrink-0 ${activeView === 'submit' ? 'bg-neo-primary text-neo-text border-b-4 border-b-neo-text' : 'bg-white hover:bg-neo-secondary'}`}
                 >
-                    <Plus size={24} weight="bold" />
+                    <Plus size={22} weight="bold" className="flex-shrink-0" />
                     Submit Incident
                 </button>
                 <button
                     onClick={() => setActiveView('analytics')}
-                    className={`flex items-center gap-2 px-6 py-4 font-mono font-bold uppercase border-r-3 border-neo-border transition-all ${activeView === 'analytics' ? 'bg-neo-primary text-neo-text border-b-4 border-b-neo-text' : 'bg-white hover:bg-neo-secondary'}`}
+                    className={`flex items-center gap-2 px-4 md:px-6 py-3 md:py-4 font-mono text-sm md:text-base font-bold uppercase border-r-3 border-neo-border transition-all whitespace-nowrap flex-shrink-0 ${activeView === 'analytics' ? 'bg-neo-primary text-neo-text border-b-4 border-b-neo-text' : 'bg-white hover:bg-neo-secondary'}`}
                 >
-                    <ChartBar size={24} weight="bold" />
+                    <ChartBar size={22} weight="bold" className="flex-shrink-0" />
                     Analytics
                 </button>
             </div>
