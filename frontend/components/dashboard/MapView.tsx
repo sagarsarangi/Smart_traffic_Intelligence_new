@@ -14,7 +14,7 @@ import {
     predictIncident,
     resetAnomalyReplay,
 } from '../../lib/api';
-import { WarningCircle, ArrowRight, ListDashes, X, ArrowsClockwise, Play, Stop } from '@phosphor-icons/react';
+import { WarningCircle, ArrowRight, ListDashes, X, ArrowsClockwise, Play, Stop, Plus } from '@phosphor-icons/react';
 
 // ---------------------------------------------------------------------------
 // Heatmap Layer — updates the Leaflet heat layer whenever `points` changes.
@@ -149,12 +149,13 @@ const sortAnomalies = (zones: any[]) => {
 // ---------------------------------------------------------------------------
 interface MapViewProps {
     onOpenPanel: (data: any) => void;
+    onSwitchToSubmit?: () => void;
 }
 
 // ---------------------------------------------------------------------------
 // MapView
 // ---------------------------------------------------------------------------
-export default function MapView({ onOpenPanel }: MapViewProps) {
+export default function MapView({ onOpenPanel, onSwitchToSubmit }: MapViewProps) {
     // ── Heatmap ─────────────────────────────────────────────────────────────
     // staticHeatmap: loaded once from /heatmap (full, pre-computed dataset)
     // replayHeatmap: polled from /heatmap/replay every 5 s when replay is active
@@ -389,6 +390,18 @@ export default function MapView({ onOpenPanel }: MapViewProps) {
                     >
                         <Stop size={28} weight="bold" />
                         <span className="font-mono font-bold uppercase hidden md:block">Stop Replay</span>
+                    </button>
+                )}
+
+                {/* New Incident button */}
+                {onSwitchToSubmit && (
+                    <button
+                        onClick={onSwitchToSubmit}
+                        className="bg-neo-primary border-4 border-neo-border p-3 shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center justify-center gap-2"
+                        title="Submit a new traffic incident"
+                    >
+                        <Plus size={28} weight="bold" />
+                        <span className="font-mono font-bold uppercase hidden md:block">New Incident</span>
                     </button>
                 )}
 

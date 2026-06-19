@@ -65,7 +65,7 @@ export default function DashboardPage() {
             {/* Main Content Area */}
             <div className="flex-1 relative flex overflow-hidden">
                 <div className="flex-1 overflow-y-auto bg-grid relative">
-                    {activeView === 'map' && <MapView onOpenPanel={openPanelWithData} />}
+                    {activeView === 'map' && <MapView onOpenPanel={openPanelWithData} onSwitchToSubmit={() => setActiveView('submit')} />}
                     {activeView === 'submit' && <SubmitIncidentView onOpenPanel={openPanelWithData} />}
                     {activeView === 'analytics' && <AnalyticsView />}
                 </div>
