@@ -78,11 +78,9 @@ The dashboard has three views and one component that is shared across all of the
 
 ### View 1 — Map (the default screen)
 
-This is what the user sees when they log in. It is a full-screen Leaflet.js map of Bengaluru with two layers:
+This is what the user sees when they log in. It is a full-screen Leaflet.js map of Bengaluru.
 
-The first layer is a heatmap. Every incident in the dataset is plotted at its latitude/longitude, with weight determined by priority (High incidents contribute more heat than Low) and duration (longer incidents contribute more heat). It defaults to a static historical view showing overall city clustering. However, it also includes a "City Replay" mode, which streams chronological incident data into the heatmap dynamically, accumulating points over time to show how traffic builds up. The map dynamically adjusts its radius and blur based on the zoom level to maintain accurate representations of congested corridors and junctions.
-
-The second layer is zone polygons. Each zone boundary is drawn as a polygon over the map. The fill color of each polygon reflects the current anomaly status of that zone — green for Normal, amber for Watch, red for Critical. This connects the Anomaly Monitor directly to the spatial view, so the user can see at a glance which parts of the city are behaving unusually without reading a list.
+The base layer is a heatmap. Every incident in the dataset is plotted at its latitude/longitude, with weight determined by priority (High incidents contribute more heat than Low) and duration (longer incidents contribute more heat). It defaults to a static historical view showing overall city clustering. However, it also includes a "City Replay" mode, which streams chronological incident data into the heatmap dynamically, accumulating points over time to show how traffic builds up. The map dynamically adjusts its radius and blur based on the zoom level to maintain accurate representations of congested corridors and junctions.
 
 The Anomaly Monitor feed sits as a collapsible sidebar on this same screen. It shows a card per zone with its alert level and the three numbers that drove the alert. Clicking "Generate Plan" on a zone card opens the Incident Panel for that zone.
 
@@ -126,7 +124,6 @@ For new submissions, the prediction runs on the user's input. For anomaly zone a
 
 ## 5. How the Views Interlink
 
-- The Map view and the Anomaly Monitor are permanently connected: zone polygon colors on the map exactly reflect the anomaly badge levels in the sidebar. They update together.
 - The Analytics view and the Map view are connected through junction filtering: clicking a junction bar in Chart 2 pans the map to that junction and highlights its markers.
 - The Incident Panel is the single output surface. Whether the user submitted a form, or responded to an anomaly alert, they see the same panel.
 - The Anomaly Monitor feeds the Incident Panel: clicking "Generate Plan" on a zone card triggers the same NLP-parse-skipped, prediction-then-action-plan pipeline that View 2 uses, but with zone-level context instead of individual incident context.
@@ -190,7 +187,7 @@ Output: a JSON object with four fields:
 
 ### Agent 3 — Anomaly Detection Agent (Isolation Forest)
 
-This agent runs on a schedule, not in response to user actions. It runs every 13 seconds and produces a score for each zone. It does not run per-incident — it runs per-zone.
+This agent runs on a schedule, not in response to user actions. The frontend polls for updates every 10 seconds. It does not run per-incident — it runs per-zone.
 
 **Grouping strategy for null zones:** Records where zone is null are grouped by `police_station` for the purposes of this agent. This ensures that all 8,173 records contribute to the baseline, not just the 43% with a non-null zone.
 
@@ -211,7 +208,7 @@ Isolation Forest internally tries to isolate this point by making random splits 
 
 We convert this to a human-readable alert level: scores above 0 = Normal, 0 to -0.1 = Watch, below -0.1 = Critical. These thresholds are tuned by inspecting the score distribution across the dataset.
 
-The agent runs every 0.09 seconds during the demo by streaming new incidents sequentially from the dataset into a per-zone sliding-window deque (incidents older than 24 hours of simulated time are evicted), computing the three statistics from the current window's state, feeding them to the trained model, and returning the scores. Once the dataset is exhausted, the replay loop stops and freezes at the final state. The frontend polls `/anomaly` every 5 seconds and updates the zone cards and map polygon colors.
+The agent runs every 0.09 seconds during the demo by streaming new incidents sequentially from the dataset into a per-zone sliding-window deque (incidents older than 24 hours of simulated time are evicted), computing the three statistics from the current window's state, feeding them to the trained model, and returning the scores. Once the dataset is exhausted, the replay loop stops and freezes at the final state. The frontend polls `/anomaly` every 10 seconds and updates the zone cards.
 
 Output per zone: `{ zone, alert_level, incident_count, high_priority_ratio, mean_duration, anomaly_score }`.
 

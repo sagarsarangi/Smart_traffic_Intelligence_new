@@ -337,7 +337,7 @@ For planned events (`event_type == "planned"`), the prompt instructs pre-emptive
 
 Alert level thresholds: `anomaly_score > 0` = Normal, `-0.1 to 0` = Watch, `< -0.1` = Critical.
 
-Frontend polls this endpoint every 5 seconds and simultaneously updates zone polygon fill colors on the map and badge colors on the Anomaly Monitor sidebar cards.
+Frontend polls this endpoint every 10 seconds and updates badge colors on the Anomaly Monitor sidebar cards.
 
 ---
 
@@ -636,8 +636,7 @@ Background task (every 0.09s):
     → Isolation Forest scores all zones
     → GET /anomaly cache updated
 
-Frontend polls GET /anomaly every 5s:
-    → Zone polygon fill colors updated on map
+Frontend polls GET /anomaly every 10s:
     → Anomaly Monitor sidebar cards updated
 
 User clicks "Generate Plan" on a zone card:
@@ -655,10 +654,9 @@ User clicks "Generate Plan" on a zone card:
 
 **Components:**
 
-- `LeafletMap` — full-screen, four layers:
+- `LeafletMap` — full-screen, two layers:
   1. Heatmap layer (Leaflet.heat plugin). Defaults to static historical data from `GET /heatmap`, with a "City Replay" mode that polls `GET /heatmap/replay` dynamically.
-  2. Zone polygons (convex hulls computed from dataset lat/lng grouped by zone; fill color driven by `GET /anomaly`)
-  3. Incident Pin Layer: pulsing red markers for submitted incidents via View 2.
+  2. Incident Pin Layer: pulsing red markers for submitted incidents via View 2.
 - `AnoalyMonitorSidebar` — collapsible, left or right side:
   - One card per zone: name, alert badge, three numbers (count / ratio / duration)
   - "Generate Plan" button triggers Flow C
@@ -668,7 +666,7 @@ User clicks "Generate Plan" on a zone card:
 1. `GET /heatmap` (once on load)
 2. `GET /heatmap/replay` (polled every 5s if replay mode is active)
 3. `GET /incidents` (paginated, initial load)
-4. `GET /anomaly` (polled every 5s)
+4. `GET /anomaly` (polled every 10s)
 
 **Interactions:**
 
@@ -770,7 +768,7 @@ Load CSV → filter `authenticated=yes` → handle nulls (null-safe encoding, no
 Write Agent 1 prompt and `POST /nlp-parse` → test against 5 real Kannada/mixed descriptions from dataset → write `POST /predict` → write Agent 4 prompt and `GET /action-plan` with SSE (test SSE with curl before connecting frontend) → implement anomaly replay loop as FastAPI `asyncio` background task → write `GET /anomaly`, `GET /heatmap`, `GET /incidents`, `GET /analytics` → write `POST /feedback` and `GET /feedback`.
 
 **Stage 3 — Frontend core**
-Set up Leaflet map → integrate heatmap plugin → build zone polygons as convex hulls → build Anomaly Monitor sidebar polling `/anomaly` every 5s → build IncidentPanel drawer with three states.
+Set up Leaflet map → integrate heatmap plugin → build Anomaly Monitor sidebar polling `/anomaly` every 10s → build IncidentPanel drawer with three states.
 
 **Stage 4 — Frontend form, analytics, polish**
 Build Submit Incident form (both input modes) → wire three-step API sequence (`/nlp-parse` if description, then `/predict`, then `/action-plan` SSE) → build Analytics page (all three Recharts charts) → wire junction bar click to map pan → wire feedback buttons to `POST /feedback` (buttons appear only after streaming completes) → add loading skeletons and error handling.

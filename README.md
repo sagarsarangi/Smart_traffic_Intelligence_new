@@ -120,7 +120,7 @@ sequenceDiagram
     loop Every 10s
         UI->>API: GET /anomaly
         API-->>UI: Alert Levels (Normal/Watch/Critical)
-        UI->>UI: Update Map Polygons & Sidebar
+        UI->>UI: Update Anomaly Sidebar
     end
 ```
 
@@ -190,7 +190,7 @@ flowchart TD
 
 ## Dashboard Views
 
-1.  **Map View:** Full-screen Leaflet map displaying a historical or streaming heatmap, anomaly zone polygons, and a real-time alert sidebar.
+1.  **Map View:** Full-screen Leaflet map displaying a historical or streaming heatmap and a real-time alert sidebar.
 2.  **Submit Incident:** An intuitive form supporting both structured inputs and free-text NLP processing to simulate or report live incidents.
 3.  **Analytics:** Historical data charts displaying hourly volume profiles, a leaderboard of high-risk junctions, and planned versus unplanned monthly trends.
 

@@ -4,8 +4,7 @@ Route: GET /anomaly
 
 Returns the current anomaly scores for all zones/stations.
 The background replay task (started in main.py) updates the cache every 0.066 seconds.
-Frontend polls this endpoint every 5 seconds to update zone polygon colours
-and the Anomaly Monitor sidebar cards.
+Frontend polls this endpoint every 10 seconds to update the Anomaly Monitor sidebar cards.
 
 Response shape:
 {
